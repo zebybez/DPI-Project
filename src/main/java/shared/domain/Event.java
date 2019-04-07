@@ -87,14 +87,16 @@ public class Event implements Serializable {
 
     public String info(){
         StringBuilder builder = new StringBuilder();
-        builder.append("Event with:: EventNr: ")
-                .append(eventId)
+        builder.append("Event with:: Name: ")
+                .append(name)
                 .append("| Price: ")
                 .append(price)
                 .append("| Maximum people: ")
                 .append(maxAttendees)
                 .append("| Date: ")
-                .append(date);
+                .append(date)
+                .append("| eventID: ")
+                .append(eventId);
         return builder.toString();
     }
 }

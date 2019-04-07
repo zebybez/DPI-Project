@@ -13,6 +13,7 @@ import java.util.Scanner;
 public class EventMakerClient {
 
     public static void main(String[] args) {
+        //setup client identity and classes
         String clientId = "mainClient";
         String subscriptionName = "mainClient";
         LocalTime currentTime = new LocalTime();
@@ -24,14 +25,12 @@ public class EventMakerClient {
                 eventParser.parseEvent((Event) object, correlationId);
             }
         };
-        System.out.println("The current local time is: " + currentTime);
 
+        //welcome msg
+        System.out.println("the current time is: "+ currentTime);
         System.out.println("welcome to the event maker client");
 
         Scanner scanner = new Scanner(System.in);
-
-
-
         do{
             //create and send an event
             try{

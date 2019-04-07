@@ -11,7 +11,7 @@ import java.util.UUID;
 public class EventParser {
 
     public Event createEvent(Scanner scanner) throws ParseException {
-        SimpleDateFormat dateFormatter = new SimpleDateFormat("ddmmyyyy");
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("ddMMYYYY");
 
         System.out.println("new event: \n name?");
         String name = scanner.nextLine();
