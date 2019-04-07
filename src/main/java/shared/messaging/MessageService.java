@@ -23,6 +23,7 @@ public abstract class MessageService {
         connectionFactory.setTrustAllPackages(true);
         try {
             connection = connectionFactory.createConnection();
+
             connection.start();
 
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);

@@ -28,6 +28,6 @@ public class EventParser {
 
     public void parseEvent(Event event, String correlationId) {
         //todo add to memory and check for updated events or something.
-        System.out.println("Received: "+ event.toString());
+        System.out.println("Received: "+ event.info());
     }
 }

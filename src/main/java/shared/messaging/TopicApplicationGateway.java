@@ -9,8 +9,8 @@ import java.io.Serializable;
 //todo make special serializer instead of object messages.
 public class TopicApplicationGateway<IN extends Serializable, OUT extends Serializable> extends ApplicationGateway {
 
-    public TopicApplicationGateway(Destinations outgoing, Destinations incoming) {
-        messageService = new TopicMessageService(outgoing, incoming, new MessageListener() {
+    public TopicApplicationGateway(Destinations outgoing, Destinations incoming, String clientId, String subscriptionName) {
+        messageService = new TopicMessageService(outgoing, incoming, clientId, subscriptionName, new MessageListener() {
             @Override
             public void onMessage(Message message) {
                 try {

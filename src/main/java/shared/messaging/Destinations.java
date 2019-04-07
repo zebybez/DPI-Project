@@ -7,7 +7,9 @@ public enum Destinations {
     ATTEND_EVENT("attendEvent.queue"),
 
     INVOICE("invoice.queue"),
-    INVOICE_REPLY("invoiceReply.queue");
+    INVOICE_REPLY("invoiceReply.queue"),
+
+    NO_DESTINATION("invalid");
 
 
     private String destination;
