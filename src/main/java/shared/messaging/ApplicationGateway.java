@@ -2,28 +2,14 @@ package shared.messaging;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
-import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import java.io.Serializable;
 
 //todo make special serializer instead of object messages.
-public class ApplicationGateway<IN extends Serializable, OUT extends Serializable> {
+public abstract class ApplicationGateway<IN extends Serializable, OUT extends Serializable> {
 
-    private MessageService messageService;
-    private Message message;
-
-    public ApplicationGateway(Destinations outgoing, Destinations incoming) {
-        messageService = new MessageService(outgoing, incoming, new MessageListener() {
-            @Override
-            public void onMessage(Message message) {
-                try {
-                    parseMessage(getObjectFromMsg(message), message.getJMSCorrelationID());
-                } catch (JMSException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
+    public MessageService messageService;
+    public Message message;
 
     /***
      * creates a message to later be sent
@@ -80,7 +66,7 @@ public class ApplicationGateway<IN extends Serializable, OUT extends Serializabl
         return "";
     }
 
-    private IN getObjectFromMsg(Message message) {
+    public IN getObjectFromMsg(Message message) {
         ObjectMessage objMsg = (ObjectMessage) message;
         try {
             IN object = (IN) objMsg.getObject();

@@ -5,7 +5,7 @@ import org.apache.activemq.ActiveMQConnectionFactory;
 import javax.jms.*;
 
 //todo split up in sending and receiving parts
-public class MessageService {
+public abstract class MessageService {
 
     Connection connection; // to connect to the ActiveMQ
     Session session; // session for creating messages, producers and
@@ -18,7 +18,7 @@ public class MessageService {
 
     MessageListener listener; // listens for messages
 
-    public MessageService(Destinations outgoing, Destinations incoming, MessageListener listener) {
+    public MessageService() {
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
         connectionFactory.setTrustAllPackages(true);
         try {
@@ -26,14 +26,7 @@ public class MessageService {
             connection.start();
 
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-            destination = session.createQueue(outgoing.toString());
-            recieveDestination = session.createQueue(incoming.toString());
-
-            producer = session.createProducer(destination);
-            consumer = session.createConsumer(recieveDestination);
-            consumer.setMessageListener(listener);
-
-        } catch (JMSException e) {
+        } catch (JMSException e){
             e.printStackTrace();
         }
     }

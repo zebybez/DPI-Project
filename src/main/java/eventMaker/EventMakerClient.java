@@ -1,23 +1,19 @@
 package eventMaker;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalTime;
 import shared.domain.Event;
-import shared.messaging.ApplicationGateway;
+import shared.messaging.QueueApplicationGateway;
 import shared.messaging.Destinations;
 
 import java.io.Serializable;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Scanner;
 
 public class EventMakerClient {
     public static void main(String[] args) {
         LocalTime currentTime = new LocalTime();
         EventParser eventParser = new EventParser();
-        ApplicationGateway<Event, Event> eventGateway = new ApplicationGateway(Destinations.NEW_EVENT, Destinations.EVENT){
+        QueueApplicationGateway<Event, Event> eventGateway = new QueueApplicationGateway(Destinations.NEW_EVENT, Destinations.EVENT){
             @Override
             public void parseMessage(Serializable object, String correlationId) {
                 eventParser.parseEvent((Event) object, correlationId);
