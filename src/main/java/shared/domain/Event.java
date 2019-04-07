@@ -84,4 +84,17 @@ public class Event implements Serializable {
     public void setMaxAttendees(int maxAttendees) {
         this.maxAttendees = maxAttendees;
     }
+
+    public String info(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("Event with:: EventNr: ")
+                .append(eventId)
+                .append("| Price: ")
+                .append(price)
+                .append("| Maximum people: ")
+                .append(maxAttendees)
+                .append("| Date: ")
+                .append(date);
+        return builder.toString();
+    }
 }
