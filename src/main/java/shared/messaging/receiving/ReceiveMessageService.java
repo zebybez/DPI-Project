@@ -1,24 +1,20 @@
-package shared.messaging;
+package shared.messaging.receiving;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 
 import javax.jms.*;
 
-//todo split up in sending and receiving parts
-public abstract class MessageService {
+public abstract class ReceiveMessageService {
 
-    Connection connection; // to connect to the ActiveMQ
-    Session session; // session for creating messages, producers and
+    public Connection connection; // to connect to the ActiveMQ
+    public Session session; // session for creating messages, producers and
 
-    Destination destination; // reference to a queue/topic destination
-    Destination recieveDestination; //reference to a queue/topic
+    public Destination recievedestination; //reference to a queue/topic
 
-    MessageProducer producer; // for sending messages
-    MessageConsumer consumer; // for receiving messages
+    public MessageConsumer consumer; // for receiving messages
+    public MessageListener listener; // listens for messages
 
-    MessageListener listener; // listens for messages
-
-    public MessageService() {
+    public ReceiveMessageService() {
         ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://localhost:61616");
         connectionFactory.setTrustAllPackages(true);
         try {
@@ -34,17 +30,6 @@ public abstract class MessageService {
 
     public Session getSession() {
         return session;
-    }
-
-    public boolean sendMessage(Message objMsg) {
-        try {
-            String test = objMsg.getJMSMessageID();
-            producer.send(objMsg);
-            return true;
-        } catch (JMSException e) {
-            e.printStackTrace();
-            return false;
-        }
     }
 
     public MessageListener getListener() {

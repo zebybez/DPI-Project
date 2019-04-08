@@ -2,9 +2,10 @@ package eventMaker;
 
 import org.joda.time.LocalTime;
 import shared.domain.Event;
-import shared.messaging.QueueApplicationGateway;
+import shared.messaging.receiving.queue.QueueReceiveGateway;
 import shared.messaging.Destinations;
-import shared.messaging.TopicApplicationGateway;
+import shared.messaging.receiving.topic.TopicReceiveGateway;
+import shared.messaging.sending.queue.QueueSendGateway;
 
 import java.io.Serializable;
 import java.text.ParseException;
@@ -18,8 +19,8 @@ public class EventMakerClient {
         String subscriptionName = "mainClient";
         LocalTime currentTime = new LocalTime();
         EventParser eventParser = new EventParser();
-        QueueApplicationGateway<Event, Event> eventSendGateway = new QueueApplicationGateway(Destinations.NEW_EVENT, Destinations.NO_DESTINATION);
-        TopicApplicationGateway<Event, Event> eventReceiveGateway = new TopicApplicationGateway(Destinations.NO_DESTINATION, Destinations.EVENT, clientId, subscriptionName){
+        QueueSendGateway<Event> eventSendGateway = new QueueSendGateway<>(Destinations.NEW_EVENT);
+        TopicReceiveGateway<Event> eventReceiveGateway = new TopicReceiveGateway(Destinations.EVENT, clientId, subscriptionName){
             @Override
             public void parseMessage(Serializable object, String correlationId) {
                 eventParser.parseEvent((Event) object, correlationId);

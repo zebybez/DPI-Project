@@ -1,11 +1,9 @@
 package client;
 
-import eventMaker.EventParser;
 import org.joda.time.LocalTime;
 import shared.domain.Event;
 import shared.messaging.Destinations;
-import shared.messaging.QueueApplicationGateway;
-import shared.messaging.TopicApplicationGateway;
+import shared.messaging.receiving.topic.TopicReceiveGateway;
 
 import java.io.Serializable;
 import java.util.Scanner;
@@ -24,7 +22,7 @@ public class Client {
 
         ClientParser clientParser = new ClientParser();
 
-        TopicApplicationGateway<Event, Event> eventReceiveGateway = new TopicApplicationGateway(Destinations.NO_DESTINATION, Destinations.EVENT, clientId, subscriptionName){
+        TopicReceiveGateway<Event> eventReceiveGateway = new TopicReceiveGateway(Destinations.EVENT, clientId, subscriptionName){
             @Override
             public void parseMessage(Serializable object, String correlationId) {
                 clientParser.parseEvent((Event) object, correlationId);

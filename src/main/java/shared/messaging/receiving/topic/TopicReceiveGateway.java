@@ -1,16 +1,18 @@
-package shared.messaging;
+package shared.messaging.receiving.topic;
+
+import shared.messaging.Destinations;
+import shared.messaging.receiving.ReceiveGateway;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import javax.jms.ObjectMessage;
 import java.io.Serializable;
 
 //todo make special serializer instead of object messages.
-public class TopicApplicationGateway<IN extends Serializable, OUT extends Serializable> extends ApplicationGateway {
+public class TopicReceiveGateway<O extends Serializable> extends ReceiveGateway<O> {
 
-    public TopicApplicationGateway(Destinations outgoing, Destinations incoming, String clientId, String subscriptionName) {
-        messageService = new TopicMessageService(outgoing, incoming, clientId, subscriptionName, new MessageListener() {
+    public TopicReceiveGateway(Destinations incoming, String clientId, String subscriptionName) {
+        receiveMessageService = new TopicReceiveMessageService(incoming, clientId, subscriptionName, new MessageListener() {
             @Override
             public void onMessage(Message message) {
                 try {
