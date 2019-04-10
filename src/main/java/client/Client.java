@@ -23,6 +23,7 @@ public class Client {
         System.out.println("what is your email?");
         String email = scanner.nextLine();
         String subscriptionName = email + "EventSubscription";
+        String selector = "email = '"+email+"'";
 
         ClientParser clientParser = new ClientParser();
 
@@ -33,7 +34,7 @@ public class Client {
             }
         };
         QueueSendGateway<AttendRequest> attendRequestSendGateway = new QueueSendGateway<>(Destinations.ATTEND_EVENT);
-        QueueReceiveGateway<Invoice> invoiceReceiveGateway = new QueueReceiveGateway<Invoice>(Destinations.INVOICE){
+        QueueReceiveGateway<Invoice> invoiceReceiveGateway = new QueueReceiveGateway<Invoice>(Destinations.INVOICE, selector){
             @Override
             public void parseMessage(Invoice invoice, String correlationId) {
                 clientParser.parseInvoice(invoice, correlationId);
