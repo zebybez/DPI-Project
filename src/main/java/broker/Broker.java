@@ -3,9 +3,11 @@ package broker;
 import org.joda.time.LocalTime;
 import shared.domain.AttendRequest;
 import shared.domain.Event;
+import shared.domain.Invoice;
 import shared.exceptions.TooManyAttendeesException;
 import shared.messaging.Destinations;
 import shared.messaging.receiving.queue.QueueReceiveGateway;
+import shared.messaging.sending.queue.QueueSendGateway;
 import shared.messaging.sending.topic.TopicSendGateway;
 
 public class Broker {
@@ -37,5 +39,6 @@ public class Broker {
             }
         };
 
+        //QueueSendGateway<Invoice> invoiceSendGateway = new QueueSendGateway<>(Destinations.INVOICE)
     }
 }

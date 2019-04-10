@@ -20,10 +20,10 @@ public class EventMakerClient {
         LocalTime currentTime = new LocalTime();
         EventParser eventParser = new EventParser();
         QueueSendGateway<Event> eventSendGateway = new QueueSendGateway<>(Destinations.NEW_EVENT);
-        TopicReceiveGateway<Event> eventReceiveGateway = new TopicReceiveGateway(Destinations.EVENT, clientId, subscriptionName){
+        TopicReceiveGateway<Event> eventReceiveGateway = new TopicReceiveGateway<Event>(Destinations.EVENT, clientId, subscriptionName){
             @Override
-            public void parseMessage(Serializable object, String correlationId) {
-                eventParser.parseEvent((Event) object, correlationId);
+            public void parseMessage(Event event, String correlationId) {
+                eventParser.parseEvent(event, correlationId);
             }
         };
 

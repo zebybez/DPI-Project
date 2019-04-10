@@ -38,4 +38,18 @@ public class Invoice implements Serializable {
         return date;
     }
 
+    public String info(){
+        StringBuilder builder = new StringBuilder();
+        builder.append("Invoice with Nr: ")
+                .append(invoiceNr)
+                .append("| for customer:")
+                .append(customerEmail)
+                .append("| Price: ")
+                .append(price)
+                .append("| For event ")
+                .append(EventId)
+                .append("| Date: ")
+                .append(date);
+        return builder.toString();
+    }
 }

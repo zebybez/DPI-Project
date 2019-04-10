@@ -23,4 +23,17 @@ public class QueueReceiveGateway<O extends Serializable> extends ReceiveGateway<
             }
         });
     }
+
+    public QueueReceiveGateway(Destinations incoming, String selector) {
+        receiveMessageService = new QueueReceiveSpecificMessageService(incoming, selector, new MessageListener() {
+            @Override
+            public void onMessage(Message message) {
+                try {
+                    parseMessage(getObjectFromMsg(message), message.getJMSCorrelationID());
+                } catch (JMSException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 }

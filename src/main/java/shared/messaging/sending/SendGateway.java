@@ -33,6 +33,22 @@ public abstract class SendGateway<OUT extends Serializable> {
     }
 
     /***
+     * sets a string property for the next message sent
+     * @param name the name of the property
+     * @param value the value of the property
+     */
+    public void setStringProperty(String name, String value) {
+        try {
+            message.setStringProperty(name, value);
+        } catch (JMSException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            System.out.println("instantiate the queue first using the \"createMessage\" Method");
+            e.printStackTrace();
+        }
+    }
+
+    /***
      * sets the correlation id for the next queue sent
      * @param id the id to set
      */

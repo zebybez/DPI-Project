@@ -4,6 +4,7 @@ import org.joda.time.LocalTime;
 import shared.domain.AttendRequest;
 import shared.domain.Event;
 import shared.domain.Invoice;
+import shared.domain.InvoiceReply;
 import shared.messaging.Destinations;
 import shared.messaging.receiving.queue.QueueReceiveGateway;
 import shared.messaging.receiving.topic.TopicReceiveGateway;
@@ -25,15 +26,21 @@ public class Client {
 
         ClientParser clientParser = new ClientParser();
 
-        TopicReceiveGateway<Event> eventReceiveGateway = new TopicReceiveGateway(Destinations.EVENT, email, subscriptionName){
+        TopicReceiveGateway<Event> eventReceiveGateway = new TopicReceiveGateway<Event>(Destinations.EVENT, email, subscriptionName){
             @Override
-            public void parseMessage(Serializable object, String correlationId) {
-                clientParser.parseEvent((Event) object, correlationId);
+            public void parseMessage(Event event, String correlationId) {
+                clientParser.parseEvent(event, correlationId);
             }
         };
         QueueSendGateway<AttendRequest> attendRequestSendGateway = new QueueSendGateway<>(Destinations.ATTEND_EVENT);
-        QueueReceiveGateway<Invoice> invoiceReceiveGateway = new QueueReceiveGateway<>(Destinations.INVOICE);
-        QueueSendGateway<Invoice> invoiceSendGateway = new QueueSendGateway<>(Destinations.INVOICE_REPLY);
+        QueueReceiveGateway<Invoice> invoiceReceiveGateway = new QueueReceiveGateway<Invoice>(Destinations.INVOICE){
+            @Override
+            public void parseMessage(Invoice invoice, String correlationId) {
+                clientParser.parseInvoice(invoice, correlationId);
+            }
+        };
+
+        QueueSendGateway<InvoiceReply> invoiceSendGateway = new QueueSendGateway<>(Destinations.INVOICE_REPLY);
 
 
         boolean doing = true;
