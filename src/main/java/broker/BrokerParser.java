@@ -44,12 +44,13 @@ public class BrokerParser {
         int i = 0;
         for(Event e : eventMap.values()){
             System.out.println("Nr-"+i+": "+e.info());
+            i++;
         }
     }
 
 
 
-    public Event getEventId(int eventIndex) {
+    public Event getEvent(int eventIndex) {
         int i = 0;
         for(Event e : eventMap.values()){
             if(i == eventIndex){
