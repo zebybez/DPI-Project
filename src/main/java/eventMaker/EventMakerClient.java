@@ -31,18 +31,35 @@ public class EventMakerClient {
         System.out.println("the current time is: "+ currentTime);
         System.out.println("welcome to the event maker client");
 
+
+        //todo update events
+        //user interface
         Scanner scanner = new Scanner(System.in);
+        boolean doing = true;
         do{
-            //create and send an event
-            try{
-                Event event = eventParser.createEvent(scanner);
-                System.out.println("Sending: "+ event.info());
-                eventSendGateway.createMessage(event);
-                eventSendGateway.sendMessage();
-            } catch (ParseException e){
-                System.out.println("write a proper date next time");
+            System.out.println("type create or stop");
+            String switchString = scanner.nextLine();
+            switch(switchString){
+                case"create":
+                    //create and send an event
+                    try{
+                        Event event = eventParser.createEvent(scanner);
+                        System.out.println("Sending: "+ event.info());
+                        eventSendGateway.createMessage(event);
+                        eventSendGateway.sendMessage();
+                    } catch (ParseException e){
+                        System.out.println("write a proper date next time");
+                    }
+                    break;
+                case"stop":
+                    doing = false;
+                    break;
+                    default:
+                        System.out.println("type either stop or create");
+                        break;
             }
-        } while (true);
+
+        } while (doing);
 
     }
 

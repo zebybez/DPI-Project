@@ -41,9 +41,9 @@ public class Client {
             }
         };
 
-        QueueSendGateway<InvoiceReply> invoiceSendGateway = new QueueSendGateway<>(Destinations.INVOICE_REPLY);
+        QueueSendGateway<InvoiceReply> invoiceReplySendGateway = new QueueSendGateway<>(Destinations.INVOICE_REPLY);
 
-
+        //user interface
         boolean doing = true;
         do{
             System.out.println("please type \"attend to attend an event\", or type \"invoice\" to pay events, type \"stop \" to exit the program");
@@ -62,7 +62,18 @@ public class Client {
                     }
                     break;
                 case "invoice":
-                    System.out.println("not implemented");
+                    if(!clientParser.invoicesIsEmpty()){
+                        clientParser.listInvoices();
+                        System.out.println("enter the number of the invoice to pay");
+                        int invoiceIndex = Integer.valueOf(scanner.nextLine());
+                        Invoice invoice = clientParser.getInvoice(invoiceIndex);
+                        invoiceReplySendGateway.createMessage(new InvoiceReply(invoice.getInvoiceNr(), email));
+                        invoiceReplySendGateway.sendMessage();
+                        clientParser.removeInvoice(invoiceIndex);
+                    } else {
+                        System.out.println("currently no invoices");
+                    }
+
                     break;
                 case"stop":
                     doing = false;

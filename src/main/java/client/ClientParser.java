@@ -38,7 +38,7 @@ public class ClientParser {
 
     public void parseInvoice(Invoice invoice, String correlationId) {
         System.out.println("Received " + invoice.info());
-
+        invoices.add(invoice);
     }
 
     public void listInvoices(){
@@ -53,5 +53,9 @@ public class ClientParser {
 
     public boolean invoicesIsEmpty(){
         return 0 == invoices.size();
+    }
+
+    public void removeInvoice(int invoiceIndex) {
+        invoices.remove(invoiceIndex);
     }
 }
