@@ -5,13 +5,14 @@ import shared.domain.Event;
 import shared.exceptions.TooManyAttendeesException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class BrokerParser {
 
-    Map<String, Event> eventMap;
-    Map<String, List<String>> attendeeMap;
+    Map<String, Event> eventMap = new HashMap<>();
+    Map<String, List<String>> attendeeMap = new HashMap<>();
 
     int counter = 0;
 
@@ -32,7 +33,7 @@ public class BrokerParser {
         String eventId =attendRequest.getEventId();
         int max = eventMap.get(eventId).getMaxAttendees();
         List toAddTo = attendeeMap.get(attendRequest.getEventId());
-        if(max < toAddTo.size()){
+        if(max > toAddTo.size()){
             toAddTo.add(attendRequest.getEmail());
             attendeeMap.put(eventId, toAddTo);
         }

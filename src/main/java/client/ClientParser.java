@@ -28,6 +28,10 @@ public class ClientParser {
         return events.get(index);
     }
 
+    public void removeEvent(int index){
+        events.remove(index);
+    }
+
     public boolean eventsIsEmpty(){
         return 0 == events.size();
     }

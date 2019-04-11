@@ -56,6 +56,7 @@ public class Client {
                         int eventIndex = Integer.valueOf(scanner.nextLine());
                         attendRequestSendGateway.createMessage(new AttendRequest(clientParser.getEvent(eventIndex).getEventId(), email));
                         attendRequestSendGateway.sendMessage();
+                        clientParser.removeEvent(eventIndex);
                     }else {
                         System.out.println("currently no events");
                     }
