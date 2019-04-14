@@ -4,12 +4,9 @@ import shared.domain.AttendRequest;
 import shared.domain.Event;
 import shared.exceptions.TooManyAttendeesException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class BrokerParser {
+public class BrokerData {
 
     Map<String, Event> eventMap = new HashMap<>();
     Map<String, List<String>> attendeeMap = new HashMap<>();
@@ -40,12 +37,8 @@ public class BrokerParser {
         else throw new TooManyAttendeesException();
     }
 
-    public void listEvents() {
-        int i = 0;
-        for(Event e : eventMap.values()){
-            System.out.println("Nr-"+i+": "+e.info());
-            i++;
-        }
+    public Collection<Event> getEventList() {
+        return eventMap.values();
     }
 
 
