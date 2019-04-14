@@ -4,11 +4,9 @@ import com.google.gson.Gson;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
-import javax.jms.ObjectMessage;
 import javax.jms.TextMessage;
-import java.io.Serializable;
 
-public abstract class ReceiveGateway<IN extends Serializable> {
+public abstract class ReceiveGateway<IN> {
 
     public ReceiveMessageService receiveMessageService;
 
@@ -21,12 +19,9 @@ public abstract class ReceiveGateway<IN extends Serializable> {
     }
 
     public IN getObjectFromMsg(Message message) {
-        ObjectMessage objMsg = (ObjectMessage) message;
         try {
             TextMessage txtMsg = (TextMessage) message;
-            IN object = gson.fromJson(txtMsg.getText(), type);
-            IN object = (IN) objMsg.getObject();
-            return object;
+            return gson.fromJson(txtMsg.getText(), type);
         } catch (JMSException e) {
             e.printStackTrace();
         }

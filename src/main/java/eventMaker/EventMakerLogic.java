@@ -21,7 +21,7 @@ public class EventMakerLogic {
 
     private void initGateways(){
         eventSendGateway = new QueueSendGateway<>(Destinations.NEW_EVENT);
-        eventReceiveGateway = new TopicReceiveGateway<Event>(Destinations.EVENT, clientId, subscriptionName) {
+        eventReceiveGateway = new TopicReceiveGateway<Event>(Event.class, Destinations.EVENT, clientId, subscriptionName) {
             @Override
             public void parseMessage(Event event, String correlationId) {
                 parseEvent(event, correlationId);

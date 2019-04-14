@@ -6,12 +6,12 @@ import shared.messaging.receiving.ReceiveGateway;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import java.io.Serializable;
 
 //todo make special serializer instead of object messages.
-public class QueueReceiveGateway<O extends Serializable> extends ReceiveGateway<O> {
+public class QueueReceiveGateway<O> extends ReceiveGateway<O> {
 
-    public QueueReceiveGateway(Destinations incoming) {
+    public QueueReceiveGateway(Class type, Destinations incoming) {
+        super(type);
         receiveMessageService = new QueueReceiveMessageService(incoming, new MessageListener() {
             @Override
             public void onMessage(Message message) {
@@ -24,7 +24,8 @@ public class QueueReceiveGateway<O extends Serializable> extends ReceiveGateway<
         });
     }
 
-    public QueueReceiveGateway(Destinations incoming, String selector) {
+    public QueueReceiveGateway(Class type, Destinations incoming, String selector) {
+        super(type);
         receiveMessageService = new QueueReceiveSpecificMessageService(incoming, selector, new MessageListener() {
             @Override
             public void onMessage(Message message) {

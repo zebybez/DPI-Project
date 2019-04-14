@@ -29,14 +29,14 @@ public class BrokerLogic {
     private void initGateways(){
         invoiceSendGateway = new QueueSendGateway<>(Destinations.INVOICE);
         eventSendTopicGateway = new TopicSendGateway<>(Destinations.EVENT);
-        newEventReceiveGateway = new QueueReceiveGateway<Event>(Destinations.NEW_EVENT) {
+        newEventReceiveGateway = new QueueReceiveGateway<Event>(Event.class, Destinations.NEW_EVENT) {
             @Override
             public void parseMessage(Event event, String correlationId) {
                 parseNewEvent(event);
             }
         };
 
-        attendRequestReceiveGateway = new QueueReceiveGateway<AttendRequest>(Destinations.ATTEND_EVENT) {
+        attendRequestReceiveGateway = new QueueReceiveGateway<AttendRequest>(AttendRequest.class, Destinations.ATTEND_EVENT) {
             @Override
             public void parseMessage(AttendRequest attendRequest, String correlationId) {
                     parseAttendRequest(attendRequest);

@@ -6,12 +6,12 @@ import shared.messaging.receiving.ReceiveGateway;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import java.io.Serializable;
 
 //todo make special serializer instead of object messages.
-public class TopicReceiveGateway<O extends Serializable> extends ReceiveGateway<O> {
+public class TopicReceiveGateway<O> extends ReceiveGateway<O> {
 
-    public TopicReceiveGateway(Destinations incoming, String clientId, String subscriptionName) {
+    public TopicReceiveGateway(Class type, Destinations incoming, String clientId, String subscriptionName) {
+        super(type);
         receiveMessageService = new TopicReceiveMessageService(incoming, clientId, subscriptionName, new MessageListener() {
             @Override
             public void onMessage(Message message) {
