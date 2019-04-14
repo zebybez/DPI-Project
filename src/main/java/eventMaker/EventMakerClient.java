@@ -2,12 +2,12 @@ package eventMaker;
 
 import org.joda.time.LocalTime;
 import shared.domain.Event;
-import shared.messaging.Destinations;
-import shared.messaging.receiving.topic.TopicReceiveGateway;
-import shared.messaging.sending.queue.QueueSendGateway;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
+import java.util.UUID;
 
 public class EventMakerClient {
 
@@ -29,7 +29,7 @@ public class EventMakerClient {
             switch (switchString) {
                 case "new":            //create and send an event
                     try {
-                        Event event = eventMakerLogic.createEvent(scanner);
+                        Event event = createEvent(scanner);
                         eventMakerLogic.sendNewEvent(event);
                     } catch (ParseException e) {
                         System.out.println("write a proper date next time");
@@ -50,5 +50,20 @@ public class EventMakerClient {
 
     }
 
+    private static Event createEvent(Scanner scanner) throws ParseException {
+        SimpleDateFormat dateFormatter = new SimpleDateFormat("ddMMYYYY");
+
+        System.out.println("new event: \n name?");
+        String name = scanner.nextLine();
+        System.out.println("price?");
+        double price = Double.parseDouble(scanner.nextLine());
+        System.out.println("max attendees?");
+        int maxAttendees = Integer.parseInt(scanner.nextLine());
+        System.out.println("date? (ddmmyyyy)");
+        String dateString = scanner.nextLine();
+        Date date = dateFormatter.parse(dateString);
+
+        return new Event(UUID.randomUUID().toString(), name, date, price,maxAttendees);
+    }
 
 }
