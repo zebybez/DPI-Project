@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class ClientParser {
+public class ClientData {
 
     private List<Event> events = new ArrayList<>();
     private List<Invoice> invoices = new ArrayList<>();
@@ -18,10 +18,8 @@ public class ClientParser {
         events.add(event);
     }
 
-    public void listEvents(){
-        for(Event e : events){
-            System.out.println(events.indexOf(e) + e.info());
-        }
+    public List<Event> getEvents(){
+        return new ArrayList<>(events);
     }
 
     public Event getEvent(int index){
@@ -41,10 +39,8 @@ public class ClientParser {
         invoices.add(invoice);
     }
 
-    public void listInvoices(){
-        for(Invoice e : invoices){
-            System.out.println(invoices.indexOf(e) + e.info());
-        }
+    public List<Invoice> listInvoices(){
+        return new ArrayList<>(invoices);
     }
 
     public Invoice getInvoice(int index){
