@@ -1,5 +1,7 @@
 package shared.messaging.sending;
 
+import com.google.gson.Gson;
+
 import javax.jms.JMSException;
 import javax.jms.Message;
 import java.io.Serializable;
@@ -8,12 +10,20 @@ public abstract class SendGateway<OUT extends Serializable> {
     public SendMessageService sendMessageService;
     public Message message;
 
+    private Gson gson;
+    public SendGateway() {
+        this.gson = new Gson();
+    }
+
     /***
      * creates a queue to later be sent
      * @param object the object to put in the queue
      */
     public void createMessage(OUT object) {
         try {
+            String msg = gson.toJson(object);
+            message = sendMessageService.getSession().createTextMessage(msg);
+
             message = sendMessageService.getSession().createObjectMessage(object);
         } catch (JMSException e) {
             e.printStackTrace();
