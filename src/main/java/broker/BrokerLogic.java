@@ -46,11 +46,13 @@ public class BrokerLogic {
 
     public void parseNewEvent(Event event) {
         brokerData.parseNewEvent(event, "");
+        System.out.println("Received: "+ event.info());
         eventSendTopicGateway.createMessage(event);
         eventSendTopicGateway.sendMessage();
     }
 
     public void parseAttendRequest(AttendRequest attendRequest) {
+        System.out.println("Received: attendRequest from:" + attendRequest.getEmail());
         try{
             brokerData.parseAttendRequest(attendRequest, "");
         } catch (TooManyAttendeesException e) {
@@ -61,7 +63,7 @@ public class BrokerLogic {
     public void listEvents() {
         int i = 0;
         for(Event e : brokerData.getEventList()){
-            System.out.println("Nr-"+i+": "+e.info());
+            System.out.println(i+". "+e.info());
             i++;
         }
     }
@@ -73,6 +75,7 @@ public class BrokerLogic {
             invoiceSendGateway.createMessage(new Invoice(email, event.getEventId(), brokerData.nextNumber(), event.getPrice(), new LocalTime().toDateTimeToday().toDate()));
             invoiceSendGateway.setStringProperty("email", email);
             invoiceSendGateway.sendMessage();
+            System.out.println("Send: invoice to " + email);
         }
     }
 }

@@ -31,23 +31,21 @@ public class ClientLogic {
     }
 
     private void initGateways(){
+        invoiceReplySendGateway = new QueueSendGateway<>(Destinations.INVOICE_REPLY);
+        attendRequestSendGateway = new QueueSendGateway<>(Destinations.ATTEND_EVENT);
+
         eventReceiveGateway = new TopicReceiveGateway<Event>(Destinations.EVENT, email, subscriptionName){
             @Override
             public void parseMessage(Event event, String correlationId) {
                 clientData.parseEvent(event, correlationId);
             }
         };
-
-        attendRequestSendGateway = new QueueSendGateway<>(Destinations.ATTEND_EVENT);
         invoiceReceiveGateway = new QueueReceiveGateway<Invoice>(Destinations.INVOICE, selector){
             @Override
             public void parseMessage(Invoice invoice, String correlationId) {
                 clientData.parseInvoice(invoice, correlationId);
             }
         };
-
-
-        invoiceReplySendGateway = new QueueSendGateway<>(Destinations.INVOICE_REPLY);
     }
 
     public void sendAttendRequest(int eventIndex) {
