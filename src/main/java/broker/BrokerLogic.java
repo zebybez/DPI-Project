@@ -24,6 +24,7 @@ public class BrokerLogic {
     public BrokerLogic() {
         brokerData = new BrokerData();
         initGateways();
+
     }
 
     private void initGateways(){

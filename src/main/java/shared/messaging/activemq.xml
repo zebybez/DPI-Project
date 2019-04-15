@@ -1,0 +1,17 @@
+<destinationPolicy>
+    <policyMap>
+        <policyEntries>
+            <!-- Set the following policy on all queues using the '>' wildcard -->
+            <policyEntry queue="invoice>">
+                <deadLetterStrategy>
+                    <!--
+                      Use the prefix 'DLQ.' for the destination name, and make
+                      the DLQ a queue rather than a topic
+                    -->
+                    <individualDeadLetterStrategy queuePrefix="DLQ." useQueueForQueueMessages="true"/>
+                </deadLetterStrategy>
+            </policyEntry>
+        </policyEntries>
+    </policyMap>
+</destinationPolicy>
+

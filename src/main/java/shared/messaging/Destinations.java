@@ -9,6 +9,8 @@ public enum Destinations {
     INVOICE("invoice.queue"),
     INVOICE_REPLY("invoiceReply.queue"),
 
+    DEAD_LETTER("deadletter.queue"),
+
     NO_DESTINATION("invalid");
 
 
