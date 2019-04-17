@@ -16,7 +16,7 @@ public class BrokerData {
 
     int invoiceCounter = 0;
 
-    public void parseNewEvent(Event event, String correlationId){
+    public void parseNewEvent(Event event){
 
         String eventId = event.getEventId();
         if(!eventMap.containsKey(eventId)){     //add new event

@@ -14,8 +14,22 @@ public class ClientData {
     private List<Invoice> invoices = new ArrayList<>();
 
     public void parseEvent(Event event, String correlationId) {
-        System.out.println("Received: " + event.info());
-        events.add(event);
+        Event toRemove = null;
+        for(Event e : events){
+            if(e.getEventId() == event.getEventId()){
+                System.out.println("Received update: " + event.info());
+                toRemove = e;
+            }else {
+                //todo elseif event.maxattendees <= 0 : remove event
+                System.out.println("Received: " + event.info());
+            }
+        }
+        if(toRemove == null){
+            events.add(event);
+        }else {
+            events.remove(toRemove);
+            events.add(event);
+        }
     }
 
     public List<Event> getEvents(){

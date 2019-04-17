@@ -31,11 +31,11 @@ public class BrokerLogic {
 
     private void initGateways(){
         invoiceSendGateway = new QueueSendGateway<>(Destinations.INVOICE);
-        eventSendTopicGateway = new TopicSendGateway<>(Destinations.EVENT);
-        newEventReceiveGateway = new QueueReceiveGateway<Event>(Event.class, Destinations.NEW_EVENT) {
+        eventSendTopicGateway = new TopicSendGateway<>(Destinations.EVENT_TOPIC);
+        newEventReceiveGateway = new QueueReceiveGateway<Event>(Event.class, Destinations.EVENT) {
             @Override
             public void parseMessage(Event event, String correlationId) {
-                parseNewEvent(event);
+                parseEvent(event);
             }
         };
 
@@ -61,8 +61,8 @@ public class BrokerLogic {
         }
     }
 
-    public void parseNewEvent(Event event) {
-        brokerData.parseNewEvent(event, "");
+    public void parseEvent(Event event) {
+        brokerData.parseNewEvent(event);
         System.out.println("Received: "+ event.info());
         eventSendTopicGateway.createMessage(event);
         eventSendTopicGateway.sendMessage();

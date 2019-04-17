@@ -34,7 +34,7 @@ public class ClientLogic {
         invoiceReplySendGateway = new QueueSendGateway<>(Destinations.INVOICE_REPLY);
         attendRequestSendGateway = new QueueSendGateway<>(Destinations.ATTEND_EVENT);
 
-        eventReceiveGateway = new TopicReceiveGateway<Event>(Event.class, Destinations.EVENT, email, subscriptionName){
+        eventReceiveGateway = new TopicReceiveGateway<Event>(Event.class, Destinations.EVENT_TOPIC, email, subscriptionName){
             @Override
             public void parseMessage(Event event, String correlationId) {
                 clientData.parseEvent(event, correlationId);
