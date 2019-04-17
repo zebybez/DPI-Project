@@ -4,6 +4,7 @@ import org.joda.time.LocalTime;
 import shared.domain.AttendRequest;
 import shared.domain.Event;
 import shared.domain.Invoice;
+import shared.domain.InvoiceReply;
 import shared.exceptions.TooManyAttendeesException;
 import shared.messaging.Destinations;
 import shared.messaging.receiving.queue.QueueReceiveGateway;
@@ -18,6 +19,7 @@ public class BrokerLogic {
     private TopicSendGateway<Event> eventSendTopicGateway;
     private QueueReceiveGateway<Event> newEventReceiveGateway;
     private QueueReceiveGateway<AttendRequest> attendRequestReceiveGateway;
+    private QueueReceiveGateway<InvoiceReply> invoiceReplyReceiveGateway;
     private BrokerData brokerData;
 
 
@@ -43,6 +45,20 @@ public class BrokerLogic {
                     parseAttendRequest(attendRequest);
             }
         };
+        invoiceReplyReceiveGateway = new QueueReceiveGateway<InvoiceReply>(InvoiceReply.class, Destinations.INVOICE_REPLY) {
+            @Override
+            public void parseMessage(InvoiceReply invoiceReply, String correlationId) {
+                parseInvoiceReply(invoiceReply);
+            }
+        };
+    }
+
+    private void parseInvoiceReply(InvoiceReply invoiceReply) {
+        System.out.println("Received: " +invoiceReply.info());
+        String eventNr = brokerData.payInvoice(invoiceReply);
+        if(!brokerData.hasPendingInvoices(eventNr)){
+            System.out.println("all invoices for event "+eventNr+" payed");
+        }
     }
 
     public void parseNewEvent(Event event) {
@@ -73,10 +89,13 @@ public class BrokerLogic {
         Event event = brokerData.getEvent(eventIndex);
         List<String> attendees = brokerData.getAttendeesForEvent(event.getEventId());
         for (String email : attendees) {
-            invoiceSendGateway.createMessage(new Invoice(email, event.getEventId(), brokerData.nextNumber(), event.getPrice(), new LocalTime().toDateTimeToday().toDate()));
+            Invoice invoice = new Invoice(email, event.getEventId(), brokerData.nextNumber(), event.getPrice(), new LocalTime().toDateTimeToday().toDate());
+            invoiceSendGateway.createMessage(invoice);
             invoiceSendGateway.setStringProperty("email", email);
             invoiceSendGateway.sendMessage();
+            brokerData.saveInvoice(invoice);
             System.out.println("Send: invoice to " + email);
+
         }
     }
 }

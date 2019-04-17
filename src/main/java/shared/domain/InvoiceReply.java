@@ -26,4 +26,8 @@ public class InvoiceReply implements Serializable {
     public void setCustomerEmail(String customerEmail) {
         this.customerEmail = customerEmail;
     }
+
+    public String info() {
+        return "InvoiceReply: | for invoiceNr: "+invoiceNr+" | payed by: " + customerEmail;
+    }
 }

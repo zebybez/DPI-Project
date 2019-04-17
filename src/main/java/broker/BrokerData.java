@@ -2,6 +2,8 @@ package broker;
 
 import shared.domain.AttendRequest;
 import shared.domain.Event;
+import shared.domain.Invoice;
+import shared.domain.InvoiceReply;
 import shared.exceptions.TooManyAttendeesException;
 
 import java.util.*;
@@ -10,8 +12,9 @@ public class BrokerData {
 
     Map<String, Event> eventMap = new HashMap<>();
     Map<String, List<String>> attendeeMap = new HashMap<>();
+    Map<Integer, String> invoicesForEventMap = new HashMap<>();
 
-    int counter = 0;
+    int invoiceCounter = 0;
 
     public void parseNewEvent(Event event, String correlationId){
 
@@ -41,7 +44,12 @@ public class BrokerData {
         return eventMap.values();
     }
 
-
+    public void saveInvoice(Invoice invoice)
+    {
+        int invoiceNr = invoice.getInvoiceNr();
+        String eventNr = invoice.getEventId();
+        invoicesForEventMap.put(invoiceNr, eventNr);
+    }
 
     public Event getEvent(int eventIndex) {
         int i = 0;
@@ -58,6 +66,14 @@ public class BrokerData {
     }
 
     public int nextNumber() {
-        return ++counter;
+        return ++invoiceCounter;
+    }
+
+    public String payInvoice(InvoiceReply invoiceReply) {
+        return invoicesForEventMap.remove(invoiceReply.getInvoiceNr());
+    }
+
+    public boolean hasPendingInvoices(String eventNr) {
+        return invoicesForEventMap.values().contains(eventNr);
     }
 }
