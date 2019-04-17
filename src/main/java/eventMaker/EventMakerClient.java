@@ -30,13 +30,22 @@ public class EventMakerClient {
                 case "new":            //create and send an event
                     try {
                         Event event = createEvent(scanner);
-                        eventMakerLogic.sendNewEvent(event);
+                        eventMakerLogic.sendEvent(event);
                     } catch (ParseException e) {
                         System.out.println("write a proper date next time");
                     }
                     break;
                 case "update":
                     System.out.println("not implemented yet");
+                    eventMakerLogic.listEvents();
+                    int eventNr = Integer.valueOf(scanner.nextLine());
+                    try {
+                        Event event = updateEvent(scanner, eventMakerLogic.getEventIdFromList(eventNr));
+                        eventMakerLogic.sendEvent(event);
+                    } catch (ParseException e) {
+                        System.out.println("write a proper date next time");
+                    }
+
                     break;
                 case "stop":
                     doing = false;
@@ -53,7 +62,7 @@ public class EventMakerClient {
     private static Event createEvent(Scanner scanner) throws ParseException {
         SimpleDateFormat dateFormatter = new SimpleDateFormat("ddMMYYYY");
 
-        System.out.println("new event: \n name?");
+        System.out.println("event: \n name?");
         String name = scanner.nextLine();
         System.out.println("price?");
         double price = Double.parseDouble(scanner.nextLine());
@@ -64,6 +73,13 @@ public class EventMakerClient {
         Date date = dateFormatter.parse(dateString);
 
         return new Event(UUID.randomUUID().toString(), name, date, price,maxAttendees);
+    }
+
+
+    private static Event updateEvent(Scanner scanner, String eventId) throws ParseException {
+        Event event = createEvent(scanner);
+        event.setEventId(eventId);
+        return event;
     }
 
 }

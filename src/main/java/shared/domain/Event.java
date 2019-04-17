@@ -10,6 +10,10 @@ public class Event implements Serializable {
         return eventId;
     }
 
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
+
     public Event(String eventId, String name, Date date, double price, int maxAttendees) {
         this.eventId = eventId;
         this.name = name;

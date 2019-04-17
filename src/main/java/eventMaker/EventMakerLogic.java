@@ -5,6 +5,8 @@ import shared.messaging.Destinations;
 import shared.messaging.receiving.topic.TopicReceiveGateway;
 import shared.messaging.sending.queue.QueueSendGateway;
 
+import java.util.ArrayList;
+
 
 public class EventMakerLogic {
 
@@ -13,10 +15,25 @@ public class EventMakerLogic {
     private QueueSendGateway<Event> eventSendGateway;
     private TopicReceiveGateway<Event> eventReceiveGateway;
 
+    private EventMakerData eventMakerData;
+
     public EventMakerLogic(String clientId) {
+        eventMakerData = new EventMakerData();
         this.clientId = clientId;
         this.subscriptionName = clientId + "eventSubscription";
         initGateways();
+    }
+
+    public void listEvents() {
+        int i = 0;
+        for(Event e : eventMakerData.getEventList()){
+            System.out.println(i + ". " + e.info());
+            i++;
+        }
+    }
+
+    public String getEventIdFromList(int eventNr) {
+        return new ArrayList<>(eventMakerData.getEventList()).get(eventNr).getEventId();
     }
 
     private void initGateways(){
@@ -31,11 +48,19 @@ public class EventMakerLogic {
 
     public void parseEvent(Event event, String correlationId) {
         //todo add to memory and check for updated events or something.
-        System.out.println("Received: "+ event.info());
+        if(eventMakerData.contains(event.getEventId())){
+            eventMakerData.saveEvent(event);
+            System.out.println("Received update: "+event.info());
+        }else {
+            eventMakerData.saveEvent(event);
+            System.out.println("Received: "+ event.info());
+
+        }
     }
 
-    public void sendNewEvent(Event event) {
+    public void sendEvent(Event event) {
         System.out.println("Sending: " + event.info());
+        eventMakerData.saveEvent(event);
         eventSendGateway.createMessage(event);
         eventSendGateway.sendMessage();
     }
